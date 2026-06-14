@@ -1,0 +1,14 @@
+{
+  "name": "hexgl",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "HexGL — futuristic WebGL racing game (MIT), ported to Vite for Verse8",
+  "scripts": {
+    "dev": "vite --port 3017",
+    "build": "vite build",
+    "preview": "vite preview --port 3017"
+  },
+  "devDependencies": {
+    "vite": "^5.4.0"
+  }
+}
