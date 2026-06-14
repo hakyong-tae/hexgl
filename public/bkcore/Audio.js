@@ -18,6 +18,23 @@ bkcore.Audio.init = function(){
 
 bkcore.Audio.init();
 
+// Master mute flag. play() respects it; setMuted() also affects sounds already playing.
+bkcore.Audio.muted = false;
+
+bkcore.Audio.setMuted = function(m){
+	bkcore.Audio.muted = !!m;
+	for(var id in bkcore.Audio.sounds){
+		var s = bkcore.Audio.sounds[id];
+		if(s == null) continue;
+		if(bkcore.Audio._ctx){
+			if(s.gainNode) s.gainNode.gain.value = m ? 0 : 1;
+		}
+		else if(s.volume !== undefined){
+			s.volume = m ? 0 : 1;
+		}
+	}
+};
+
 bkcore.Audio.addSound = function(src, id, loop, callback, usePanner){
 	var ctx = bkcore.Audio._ctx;
 	var audio = new Audio();
@@ -81,7 +98,7 @@ bkcore.Audio.play = function(id){
 		sound.buffer = bkcore.Audio.sounds[id].src;
 		sound.loop = bkcore.Audio.sounds[id].loop;
 
-		bkcore.Audio.sounds[id].gainNode.gain.value = 1;
+		bkcore.Audio.sounds[id].gainNode.gain.value = bkcore.Audio.muted ? 0 : 1;
 		bkcore.Audio.sounds[id].bufferNode = sound;
 
 		sound.start ? sound.start(0) : sound.noteOn(0);
@@ -92,6 +109,7 @@ bkcore.Audio.play = function(id){
 			bkcore.Audio.sounds[id].currentTime = 0;
 		}
 
+		bkcore.Audio.sounds[id].volume = bkcore.Audio.muted ? 0 : 1;
 		bkcore.Audio.sounds[id].play();
 	}
 };
@@ -113,6 +131,8 @@ bkcore.Audio.stop = function(id){
 
 bkcore.Audio.volume = function(id, volume){
 	var ctx = bkcore.Audio._ctx;
+
+	if(bkcore.Audio.muted) volume = 0; // master mute overrides dynamic volume (e.g. wind by speed)
 
 	if(ctx){
 		bkcore.Audio.sounds[id].gainNode.gain.value = volume;

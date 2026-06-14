@@ -55,7 +55,7 @@
 
   defaultControls = bkcore.Utils.isTouchDevice() ? 1 : 0;
 
-  s = [['controlType', ['KEYBOARD', 'TOUCH', 'LEAP MOTION CONTROLLER', 'GAMEPAD'], defaultControls, defaultControls, 'Controls: '], ['quality', ['LOW', 'MID', 'HIGH', 'VERY HIGH'], 3, 3, 'Quality: '], ['hud', ['OFF', 'ON'], 1, 1, 'HUD: '], ['godmode', ['OFF', 'ON'], 0, 1, 'Godmode: '], ['track', courses.map(function(c){ return c[0]; }), 0, 0, 'Course: ']];
+  s = [['controlType', ['KEYBOARD', 'TOUCH', 'LEAP MOTION CONTROLLER', 'GAMEPAD'], defaultControls, defaultControls, 'Controls: '], ['quality', ['LOW', 'MID', 'HIGH', 'VERY HIGH'], 3, 3, 'Quality: '], ['hud', ['OFF', 'ON'], 1, 1, 'HUD: '], ['godmode', ['OFF', 'ON'], 0, 1, 'Godmode: '], ['track', courses.map(function(c){ return c[0]; }), 0, 0, 'Course: '], ['sound', ['ON', 'OFF'], 0, 0, 'Sound: ']];
 
   _fn = function(a) {
     var e, f, _ref;
@@ -75,6 +75,7 @@
 
   $('step-2').onclick = function() {
     var course = courses[s[4][3]];
+    bkcore.Audio.setMuted(s[5][3] === 1); // Sound option: 0=ON, 1=OFF
     $('step-2').style.display = 'none';
     $('step-3').style.display = 'block';
     return init(s[0][3], s[1][3], s[2][3], s[3][3], course[1], course[2]);
