@@ -3,6 +3,7 @@ import { defineConfig } from 'vite'
 // HexGL is a static WebGL game. index.html (root) loads classic <script> tags
 // and runtime XHR assets from publicDir at '/', so relative paths resolve as-is.
 export default defineConfig({
+  base: './',          // Verse8 hosts under a subpath → relative asset URLs
   publicDir: 'public',
   server: {
     port: 3017,
