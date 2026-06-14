@@ -6,9 +6,8 @@
   // difficulty 1 = built-in hard preset (HexGL.tweakShipControls).
   courses = [
     ['CITYSCAPE', 'Cityscape', 0],
+    ['REVERSE', 'CityscapeReverse', 0],
     ['HYPER', 'Cityscape', 1]
-    // ['REVERSE', 'CityscapeReverse', 0] // WIP: needs a track-on spawn point
-    //   (spawning at the start line facing 180deg drives off the track).
   ];
 
   $ = function(_) {

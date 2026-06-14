@@ -314,7 +314,8 @@ bkcore.hexgl.ShipControls.prototype.reset = function(position, rotation)
 	this.destroyed = false;
 
 	this.dummy.position.copy(position);
-	this.quaternion.set(rotation.x, rotation.y, rotation.z, 1).normalize();
+	// w defaults to 1 (legacy tracks pass {x,y,z}); variants may pass a full {x,y,z,w} quaternion.
+	this.quaternion.set(rotation.x, rotation.y, rotation.z, rotation.w == null ? 1 : rotation.w).normalize();
 	this.dummy.quaternion.set(0,0,0,1);
 	this.dummy.quaternion.multiplySelf(this.quaternion);
 
