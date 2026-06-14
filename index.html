@@ -108,5 +108,24 @@
 
     <script src="launch.js"></script>
 
+    <script>
+      // Keyboard-focus fix for embedded play (e.g. Verse8 iframe):
+      // key listeners are bound to this document, so the game window must hold
+      // focus to receive arrow keys. When the game is in an iframe and the user's
+      // last click was on the host page, focus stays on the parent and the ship
+      // never accelerates. Grab focus on load and on every interaction here.
+      (function () {
+        var grab = function () { try { window.focus(); } catch (e) {} };
+        window.addEventListener('load', grab);
+        window.addEventListener('pointerdown', grab, true);
+        window.addEventListener('mousedown', grab, true);
+        window.addEventListener('touchstart', grab, true);
+        // Stop arrow/space keys from scrolling the host page while racing.
+        window.addEventListener('keydown', function (e) {
+          if ([32, 37, 38, 39, 40].indexOf(e.keyCode) !== -1) e.preventDefault();
+        }, false);
+      })();
+    </script>
+
   </body>
 </html>
