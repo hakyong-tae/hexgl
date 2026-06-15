@@ -479,19 +479,14 @@ bkcore.hexgl.tracks.Cityscape = {
 		{
 			if(delta > 25 && this.objects.lowFPS < 1000) this.objects.lowFPS++;
 
-			var dt = delta/16.6;
+			// Clamp dt so a low/uneven framerate (heavier Verse8 iframe) can't make
+			// the ship jump far enough in one step to tunnel through the start gate /
+			// track walls or fly off the descent. update() runs collision ONCE per
+			// call, so we keep a single update (substepping would multiply the wall
+			// repulsion per frame and trap the ship at the gate at low fps).
+			var dt = Math.min(delta/16.6, 1.5);
 
-			// Substep physics+collision on large frames so the ship can't tunnel
-			// through the start gate / track walls when the framerate drops (e.g.
-			// in the heavier Verse8 iframe). Collision is checked once per
-			// shipControls.update(), so a single big dt overshoots walls.
-			// Clamp first so a huge spike frame (load/countdown->race transition)
-			// can't lurch the ship through a wall even after substepping.
-			if(dt > 4) dt = 4;
-			var _sc = this.objects.components.shipControls;
-			var _steps = Math.max(1, Math.ceil(dt));   // sub-step size <= 1 dt-unit
-			var _sdt = dt / _steps;
-			for(var _si = 0; _si < _steps; _si++) _sc.update(_sdt);
+			this.objects.components.shipControls.update(dt);
 
 			this.objects.components.shipEffects.update(dt);
 
