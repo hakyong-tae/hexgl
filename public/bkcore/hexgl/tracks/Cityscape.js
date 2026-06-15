@@ -488,6 +488,24 @@ bkcore.hexgl.tracks.Cityscape = {
 
 			this.objects.components.shipControls.update(dt);
 
+			// TEMP DEBUG overlay — shows why the ship can't pass the start on Verse8.
+			try {
+				var _dsc = this.objects.components.shipControls;
+				var _dd = document.getElementById('hexgl-dbg');
+				if(!_dd){ _dd = document.createElement('div'); _dd.id='hexgl-dbg';
+					_dd.style.cssText='position:fixed;top:2px;left:2px;z-index:99999;color:#0f0;font:11px/1.3 monospace;background:rgba(0,0,0,.75);padding:4px;white-space:pre;pointer-events:none';
+					document.body.appendChild(_dd); }
+				var _dp=_dsc.dummy.position, _dcm=_dsc.collisionMap;
+				var _dpx=Math.round(_dcm.pixels.width/2+_dp.x*_dsc.collisionPixelRatio);
+				var _dpz=Math.round(_dcm.pixels.height/2+_dp.z*_dsc.collisionPixelRatio);
+				var _dcol=_dcm.getPixel(_dpx,_dpz);
+				_dd.textContent='delta='+delta.toFixed(0)+'ms dt='+dt.toFixed(2)
+					+'\nspeed='+_dsc.getRealSpeed(100).toFixed(0)+' active='+_dsc.active+' fwd='+_dsc.key.forward
+					+'\npos='+_dp.x.toFixed(0)+','+_dp.z.toFixed(0)
+					+'\ncolR='+_dcol.r+' (255=track) loaded='+_dcm.loaded
+					+'\nfalling='+_dsc.falling+' dead='+_dsc.destroyed+' shield='+_dsc.getShield(100).toFixed(0);
+			} catch(_de){}
+
 			this.objects.components.shipEffects.update(dt);
 
 			this.objects.components.cameraChase.update(dt, this.objects.components.shipControls.getSpeedRatio());
