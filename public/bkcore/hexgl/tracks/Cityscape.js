@@ -485,8 +485,11 @@ bkcore.hexgl.tracks.Cityscape = {
 			// through the start gate / track walls when the framerate drops (e.g.
 			// in the heavier Verse8 iframe). Collision is checked once per
 			// shipControls.update(), so a single big dt overshoots walls.
+			// Clamp first so a huge spike frame (load/countdown->race transition)
+			// can't lurch the ship through a wall even after substepping.
+			if(dt > 4) dt = 4;
 			var _sc = this.objects.components.shipControls;
-			var _steps = Math.max(1, Math.min(8, Math.ceil(dt)));
+			var _steps = Math.max(1, Math.ceil(dt));   // sub-step size <= 1 dt-unit
 			var _sdt = dt / _steps;
 			for(var _si = 0; _si < _steps; _si++) _sc.update(_sdt);
 
